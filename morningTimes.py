@@ -83,4 +83,6 @@ plt.ylabel('fuel level')
 plt.xlabel('Time')
 plt.show()
 
+plt.savefig("morningTime.png")
+
 f.close()

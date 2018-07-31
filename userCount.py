@@ -62,6 +62,7 @@ plt.hist(parkRatio, bins=[.1, .2, .3, .4, .5, .6, .7, .8, .9, 1], edgecolor = 'b
 
 plt.ylabel("Frequency")
 plt.xlabel("Park Count Ratio")
+plt.tight_layout()
 
 cursor.execute("select * from bookings where created_at > '2018-06-14' and created_at < '2018-06-26' order by user_id asc;")# limit 800;")
 
@@ -111,9 +112,15 @@ for key in usersTotalCount.keys():
         users += [i]
         parkRatio += [sum(usersParkCount[key])/usersTotalCount[key]]
         i+=1
-plt.subplot(2, 1, 2)
+plt.subplot(2.2, 1, 2)
 plt.hist(parkRatio, bins=[.1, .2, .3, .4, .5, .6, .7, .8, .9, 1], edgecolor = 'black')
+plt.ylabel("Frequency")
+plt.xlabel("Drive Count Ratio")
+plt.tight_layout()
 plt.show()
 
 #print(sum(usersParkCount[15135])/usersTotalCount[15135])
+
+plt.savefig("userCount.png")
+
 mariadb_connection.close()

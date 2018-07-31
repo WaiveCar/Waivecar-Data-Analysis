@@ -76,6 +76,4 @@ with open('points-new.js', 'w') as outfile:
     outfile.write("{}{}".format("var points=", json.dumps(realSitTime)))
     
 
-
-    
 mariadb_connection.close()

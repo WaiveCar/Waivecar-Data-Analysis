@@ -90,6 +90,8 @@ plt.yscale('log', nonposy='clip')
 plt.hist(ratio, bins=[float(x)/20 for x in range(-90, 90)], edgecolor = 'black')
 
 plt.show()
+plt.savefig("carCharge.png")
+
 
 mariadb_connection.close()
 
