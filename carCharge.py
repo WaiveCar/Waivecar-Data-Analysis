@@ -68,9 +68,9 @@ for key in charge.keys():
             chargeDifference[key] = c*1.40
 #print('chargeDifference: ', chargeDifference)
 
-
-
+#This is a list of all of the diffent ratios that have been calculated
 ratio = []
+#This seems to be the frequencies of each user taking rides
 freq = {}
 for key in distance.keys():
     if key in chargeDifference and chargeDifference[key]:
@@ -83,7 +83,7 @@ for key in distance.keys():
             freq[user[key]] += 1
 #print('freq: ', freq.keys())
 #print('ratio: ', ratio)
-#print(list(reversed(sorted([(user,times) for user,times in freq.items()], key=itemgetter(1)))))
+print(list(reversed(sorted([(user,times) for user,times in freq.items()], key=itemgetter(1)))))
 
 #print(max(ratio))
 #plt.hist(ratio, bins=[-.2, -.15, -.1, -.075, -.05, -.025, 0, .025, .05, .075, .1, .15, .2, .25], edgecolor = 'black')
