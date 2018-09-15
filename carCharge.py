@@ -7,17 +7,19 @@ from operator import itemgetter
 
 
 
-mariadb_connection = mariadb.connect(user='root', password='qwerty', database='waivecar')
+mariadb_connection = mariadb.connect(user='root', password='password', database='waivecar_development')
 cursor = mariadb_connection.cursor()
 
 cursor.execute("""select bookings.id, cars.license, booking_details.type, booking_details.mileage, booking_details.charge, bookings.user_id from bookings
 join booking_details on bookings.id = booking_details.booking_id
 join cars on bookings.car_id = cars.id
-where bookings.created_at > '2017-02-01'
+where bookings.created_at > '2018-06-01'
 order by bookings.created_at asc, cars.license asc
 ;""")
 
+#This matches a booking to a starting and ending mileage
 mileage = {}
+#This matches the bookings to a user
 user = {}
 for b in cursor:
     booking_id = b[0] 
@@ -28,10 +30,11 @@ for b in cursor:
         mileage[booking_id] += [(b[3], b[2], b[1])]
     elif booking_id not in mileage and b[2] == 'start':
         mileage[booking_id] = [(b[3], b[2], b[1])]
-    
-#print(mileage)
+#print('user: ', user)    
+#print('mileage: ', mileage)
 a = []
 b = []
+#This matches a booking to its distance in miles
 distance = {}
 for key in mileage.keys():
     if len(mileage[key]) == 2:
@@ -41,9 +44,9 @@ for key in mileage.keys():
             a += [d]
         else:
             b += [d]
+#print('distance: ', distance)
 
-#print(distance)
-
+#This matches bookings with their charges at the starts and ends of rides
 charge = {}
 for b in cursor:
     booking_id = b[0] 
@@ -51,9 +54,9 @@ for b in cursor:
         charge[booking_id] += [(b[4], b[2], b[1])]
     elif booking_id not in charge and b[2] == 'start':
         charge[booking_id] = [(b[4], b[2], b[1])]
-    
-#print(charge)
+#print('charge: ', charge)
 
+#This calculates the charge differences for bookings
 chargeDifference = {}
 for key in charge.keys():
     if len(charge[key]) == 2 and charge[key][1][0] and charge[key][0][0]:
@@ -63,7 +66,7 @@ for key in charge.keys():
             chargeDifference[key] = c*.70
         else:
             chargeDifference[key] = c*1.40
-#print(chargeDifference)
+#print('chargeDifference: ', chargeDifference)
 
 
 
@@ -71,7 +74,6 @@ ratio = []
 freq = {}
 for key in distance.keys():
     if key in chargeDifference and chargeDifference[key]:
-        #print("{}".format(distance[key]))
         r = float(distance[key])/chargeDifference[key]
         if r > -5.5 and r < 5.5:
             ratio += [r]
@@ -79,10 +81,9 @@ for key in distance.keys():
             if user[key] not in freq:
                 freq[user[key]] = 0
             freq[user[key]] += 1
-print(list(reversed(sorted([(user,times) for user,times in freq.items()], key=itemgetter(1)))))
-#print(freq)
-
-#print(ratio)
+#print('freq: ', freq.keys())
+#print('ratio: ', ratio)
+#print(list(reversed(sorted([(user,times) for user,times in freq.items()], key=itemgetter(1)))))
 
 #print(max(ratio))
 #plt.hist(ratio, bins=[-.2, -.15, -.1, -.075, -.05, -.025, 0, .025, .05, .075, .1, .15, .2, .25], edgecolor = 'black')
