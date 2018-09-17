@@ -16,7 +16,6 @@ join cars on bookings.car_id = cars.id
 where bookings.created_at > '2018-06-01'
 order by bookings.created_at asc, cars.license asc
 ;""")
-
 #This matches a booking to a starting and ending mileage
 mileage = {}
 #This matches the bookings to a user
@@ -31,6 +30,7 @@ for b in cursor:
     elif booking_id not in mileage and b[2] == 'start':
         mileage[booking_id] = [(b[3], b[2], b[1])]
 #print('user: ', user)    
+print(len(user))
 #print('mileage: ', mileage)
 a = []
 b = []
@@ -70,12 +70,17 @@ for key in charge.keys():
 
 #This is a list of all of the diffent ratios that have been calculated
 ratio = []
-#This seems to be the frequencies of each user taking rides
+#This is is a hash table of all the different users with a rating below 0
 freq = {}
+#This table matches user ids to a list of ratios from their bookings
+userRatios = {}
 for key in distance.keys():
     if key in chargeDifference and chargeDifference[key]:
         r = float(distance[key])/chargeDifference[key]
         if r > -5.5 and r < 5.5:
+            if not user[key] in userRatios:
+                userRatios[user[key]] = []
+            userRatios[user[key]].append(r)
             ratio += [r]
         if r < -0:
             if user[key] not in freq:
@@ -83,7 +88,8 @@ for key in distance.keys():
             freq[user[key]] += 1
 #print('freq: ', freq.keys())
 #print('ratio: ', ratio)
-print(list(reversed(sorted([(user,times) for user,times in freq.items()], key=itemgetter(1)))))
+#print('userRatios: ', userRatios)
+#print(list(reversed(sorted([(user,times) for user,times in freq.items()], key=itemgetter(1)))))
 
 #print(max(ratio))
 #plt.hist(ratio, bins=[-.2, -.15, -.1, -.075, -.05, -.025, 0, .025, .05, .075, .1, .15, .2, .25], edgecolor = 'black')
