@@ -90,6 +90,19 @@ for key in distance.keys():
 #print('ratio: ', ratio)
 #print('userRatios: ', userRatios)
 #print(list(reversed(sorted([(user,times) for user,times in freq.items()], key=itemgetter(1)))))
+#This function calculates the maximum ratios of a user to be placed in any particular level (drainers, normal, chargers, super-chargers)
+def find_levels(ratio_list):
+    sorted_ratios = sorted(ratio_list)
+    normal_index = round(0.1 * len(ratio_list))
+    charger_index = round(0.8 * len(ratio_list))
+    super_charger_index = round(0.97 * len(ratio_list))
+    return {
+        "normal_minimum": sorted_ratios[normal_index],
+        "charger_minimum": sorted_ratios[charger_index],
+        "super_charger_minimum": sorted_ratios[super_charger_index]
+    }
+print('Ratio thresholds: ', find_levels(ratio))
+
 
 #print(max(ratio))
 #plt.hist(ratio, bins=[-.2, -.15, -.1, -.075, -.05, -.025, 0, .025, .05, .075, .1, .15, .2, .25], edgecolor = 'black')
@@ -98,7 +111,6 @@ plt.hist(ratio, bins=[float(x)/20 for x in range(-90, 90)], edgecolor = 'black')
 
 plt.show()
 plt.savefig("carCharge.png")
-
 
 mariadb_connection.close()
 
