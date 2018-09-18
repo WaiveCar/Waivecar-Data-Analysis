@@ -65,7 +65,7 @@ for key in charge.keys():
         if charge[key][0][2].lower() in ["waive{}".format(x) for x in range(1, 20)]:
             chargeDifference[key] = c*.70
         else:
-            chargeDifference[key] = c*1.40
+            chargeDifference[key] = c*1.45
 #print('chargeDifference: ', chargeDifference)
 
 #This is a list of all of the diffent ratios that have been calculated
